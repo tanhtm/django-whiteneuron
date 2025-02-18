@@ -1,4 +1,4 @@
-from apps.base.admin import base_admin_site, ModelAdmin
+from whiteneuron.base.admin import base_admin_site, ModelAdmin
 from django.contrib import admin
 from unfold.decorators import display
 from django.utils.translation import gettext as _

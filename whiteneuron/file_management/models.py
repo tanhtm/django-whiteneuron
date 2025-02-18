@@ -1,4 +1,4 @@
-from apps.base.models import BaseModel
+from whiteneuron.base.models import BaseModel
 from django.db import models
 from django.utils.html import format_html
 from django.utils.translation import gettext as _
