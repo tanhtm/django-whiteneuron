@@ -1,7 +1,7 @@
 # Khởi tạo guest interface theme cho hệ thống sử dụng BaseCommand
 
 from django.core.management.base import BaseCommand
-from apps.base.models import User, Group
+from whiteneuron.base.models import User, Group
 
 def init_admin():
     if User.objects.filter(username='guest').count() == 0:

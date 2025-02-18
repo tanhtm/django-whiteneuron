@@ -5,7 +5,7 @@ from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from django.contrib.contenttypes.models import ContentType
 from django.contrib.auth import get_user_model
-from apps.feedbacks.models import FeedbackData
+from whiteneuron.feedbacks.models import FeedbackData
 
 User = get_user_model()
 logger = logging.getLogger(__name__)

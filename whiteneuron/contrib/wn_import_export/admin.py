@@ -8,7 +8,7 @@ from django.urls import reverse
 from import_export.admin import ImportExportModelAdmin as DefaultImportExportModelAdmin
 from unfold.contrib.import_export.forms import ImportForm, ExportForm
 
-from apps.file_management.models import ExcelFile
+from whiteneuron.file_management.models import ExcelFile
 
 from .tasks import export
 

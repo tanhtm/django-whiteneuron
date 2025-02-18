@@ -1,7 +1,7 @@
 # Khởi tạo admin interface theme cho hệ thống sử dụng BaseCommand
 
 from django.core.management.base import BaseCommand
-from apps.base.models import User
+from whiteneuron.base.models import User
 
 def init_admin():
     if User.objects.filter(username='admin').count() == 0:

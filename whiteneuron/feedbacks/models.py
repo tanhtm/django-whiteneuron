@@ -3,7 +3,7 @@ from django.utils.translation import gettext_lazy as _
 from django.contrib.contenttypes.fields import GenericForeignKey
 from django.contrib.contenttypes.models import ContentType
 
-from apps.base.models import BaseModel 
+from whiteneuron.base.models import BaseModel 
 
 # Feedback
 # Đề xuất thay đổi dữ liệu

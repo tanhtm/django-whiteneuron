@@ -2,12 +2,12 @@ from django.contrib import admin, messages
 from django.utils.translation import gettext as _
 from unfold.decorators import display
 
-from apps.base.admin import base_admin_site, ModelAdmin
+from whiteneuron.base.admin import base_admin_site, ModelAdmin
 from .models import FeedbackData
 
 from django.urls import reverse
 
-from apps.base.models import Notification
+from whiteneuron.base.models import Notification
 
 @admin.register(FeedbackData, site=base_admin_site)
 class FeedbackDataAdmin(ModelAdmin):
