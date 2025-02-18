@@ -1,0 +1,30 @@
+{% extends "admin/change_form.html" %}
+{% load static %}
+
+{% block content %}
+{% if original %}
+<button id="copyButton" class="button" style="margin-bottom: 10px;">Copy embed code to clipboard
+</button>
+<input type="text" id="copyTarget" style="position:absolute; left:-9999px;">
+{% endif %}
+
+<script type="text/javascript">
+    document.addEventListener('DOMContentLoaded', function() {
+        // Lấy thông tin cần sao chép từ biến Django
+        var copyCode = "{{ copy_code|escapejs }}";
+        var copyTarget = document.getElementById('copyTarget');
+        copyTarget.value = copyCode;
+    });
+
+    document.getElementById('copyButton').addEventListener('click', function() {
+        var copyTarget = document.getElementById('copyTarget');
+        copyTarget.select();
+        document.execCommand('copy');
+        alert("Copied the text: " + copyTarget.value);
+    });
+</script>
+
+{{ block.super }}
+
+
+{% endblock %}

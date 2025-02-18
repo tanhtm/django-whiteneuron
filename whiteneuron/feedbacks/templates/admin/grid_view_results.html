@@ -1,0 +1,106 @@
+{% load admin_urls i18n wn_filters %}
+
+{% comment %}
+  Nếu có hidden fields, render chúng (nếu cần)
+{% endcomment %}
+{% if result_hidden_fields %}
+    <div class="hiddenfields">
+        {% for item in result_hidden_fields %}
+            {{ item }}
+        {% endfor %}
+    </div>
+{% endif %}
+
+{% if results %}
+    {# Sử dụng CSS Grid: 1 cột trên mobile, 2-3 cột trên màn hình lớn hơn #}
+    <div class="grid_view">
+        <div id="result_list" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+            {% for result in results %}
+                {# Nếu có lỗi cho object cụ thể, hiển thị thông báo lỗi chiếm toàn bộ hàng #}
+                {% if result.form and result.form.non_field_errors %}
+                    <div class="col-span-full text-red-500 mb-2">
+                        {{ result.form.non_field_errors }}
+                    </div>
+                {% endif %}
+                {# Flag hiển thị ở góc nếu record đã bị xóa #}
+                    <div class="border rounded shadow-sm p-4 bg-white dark:bg-base-900 relative">
+                    {# Lặp qua các cell của kết quả, bỏ qua phần tử đầu tiên (thường là checkbox cột) #}
+
+                    {% for item in result|slice:"1:" %}
+                        {# Dùng forloop.counter (bắt đầu từ 1) để lấy header tương ứng từ result_headers #}
+                        {% with header=result_headers|get_item:forloop.counter %}
+                        
+                        {# Header của item #}
+                        {% if header.text and header.text != "Hearder" %}
+                            {% if header.text == "Deleted" %}
+                                {% if "True" in item %}
+                                    <span class="absolute bg-red-500 dark:bg-red-600 font-semibold px-2 py-1 rounded text-white text-xs top-2 right-2">
+                                        Deleted
+                                    </span>
+                                {% endif %}
+                            {% else %}
+                                {# Nếu header có text, hiển thị header và giá trị #}
+                                <div class="mb-1 p-2 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg shadow-md hover:shadow-xl transform hover:-translate-y-1 transition duration-300">
+                                    <div class="mb-1">
+                                        <span class="text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wide">
+                                            {{ header.text|capfirst }}
+                                        </span>
+                                    </div>
+                                    <div>
+                                        <span class="text-sm font-semibold text-gray-800 dark:text-gray-100">
+                                            {{ item }}
+                                        </span>
+                                    </div>
+                                </div>
+                            {% endif %}
+                        {% else %}
+                        <span class="text-sm font-semibold text-gray-800 dark:text-gray-100">
+                            {{ item }}
+                        </span>
+                        {% endif %}
+                        {% endwith %}
+                    {% endfor %}
+                    
+                    {# Hiển thị các hành động (Edit, Delete,...) cho dòng #}
+                    <div class="mt-2">
+                        {% include 'unfold/helpers/actions_row.html' with actions=actions_row instance_pk=result.instance_pk %}
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+{% else %}
+    {# Nếu không có kết quả, hiển thị thông báo "No results found" #}
+    {% url cl.opts|admin_urlname:"add" as add_url %}
+    {% blocktranslate with name=cl.opts.verbose_name asvar title %}Add {{ name }}{% endblocktranslate %}
+
+    <div class="border border-base-200 flex flex-col items-center px-8 py-24 rounded shadow-sm dark:border-base-800">
+        <div class="bg-base-100 flex h-24 items-center justify-center mb-8 rounded-full w-24 dark:bg-base-800">
+            <span class="material-symbols-outlined text-base-500 !text-5xl dark:text-base-400">inbox</span>
+        </div>
+
+        <h2 class="font-semibold mb-1 text-xl text-font-important-light dark:text-font-important-dark">
+            {% trans "No results found" %}
+        </h2>
+
+        <p class="mb-6 text-center">
+            {% trans "This page yielded into no results. Create a new item or reset your filters." %}
+        </p>
+
+        {% if has_add_permission or cl.has_filters %}
+            <div class="flex flex-col gap-4 justify-center w-full lg:flex-row">
+                {% if has_add_permission %}
+                    <a href="{% add_preserved_filters add_url is_popup to_field %}" class="bg-primary-600 flex flex-row font-medium gap-2 items-center h-9.5 justify-center px-3 py-2 rounded text-white w-full lg:w-auto">
+                        <span class="material-symbols-outlined text-white">add</span> {{ title }}
+                    </a>
+                {% endif %}
+
+                {% if cl.has_filters %}
+                    <a href="{{ cl.clear_all_filters_qs }}" class="border border-base-200 flex flex-row font-medium gap-2 group/button h-9.5 items-center justify-center px-3 py-2 rounded transition-all w-full hover:text-primary-600 lg:w-auto dark:border-base-700 dark:hover:bg-base-900 dark:hover:text-primary-500">
+                        <span class="material-symbols-outlined group-hover/button:text-primary-600 dark:group-hover/button:text-base-500 text-base-400 dark:text-base-500">filter_list_off</span> {% trans "Reset filters" %}
+                    </a>
+                {% endif %}
+            </div>
+        {% endif %}
+    </div>
+{% endif %}
