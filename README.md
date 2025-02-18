@@ -1,9 +1,3 @@
-Dưới đây là file **`README.md`** hoàn chỉnh với hướng dẫn cài đặt chi tiết, bao gồm thiết lập **Tailwind CSS** và **daisyUI**. 🚀
-
----
-
-## **README.md - django-whiteneuron**
-```markdown
 # django-whiteneuron
 
 🌟 **django-whiteneuron** là một gói mở rộng giúp nâng cấp giao diện và chức năng Django Admin, mang đến trải nghiệm quản trị hiện đại, trực quan và tối ưu hiệu suất. 🚀
@@ -141,6 +135,5 @@ git checkout -b feature-new-ui
 
 💡 **django-whiteneuron** – Biến Django Admin thành một **trang quản trị mạnh mẽ, chuyên nghiệp và hiện đại**! 🚀  
 📌 **White Neuron - Tăng tốc trải nghiệm quản trị cho Developer!**
-```
 
 ---
