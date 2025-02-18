@@ -49,14 +49,17 @@ npm install
 
 ### **3️⃣ Cấu hình Django**  
 
-#### **Thêm vào `INSTALLED_APPS` trong `settings.py`**  
+#### **Thêm vào ĐẦU TIÊN trong `INSTALLED_APPS` của `settings.py`**  
 ```python
 INSTALLED_APPS = [
+    "whiteneuron",
     "whiteneuron.base",         # Base app
     "whiteneuron.feedbacks",    # Feedbacks app
     "whiteneuron.file_management", # File management app
     "whiteneuron.contrib",      # Contrib app
     "whiteneuron.dashboard",    # Dashboard app
+
+    ... # Các thư viện khác
 ]
 ```
 

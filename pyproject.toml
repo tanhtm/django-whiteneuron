@@ -1,6 +1,6 @@
 [project]
 name = "django-whiteneuron"
-version = "0.1.2"
+version = "0.1.8"
 description = "django-whiteneuron là một gói mở rộng giúp nâng cấp giao diện và chức năng Django Admin, mang đến trải nghiệm quản trị hiện đại, trực quan và tối ưu hiệu suất. 🚀"
 authors = [
     {name = "White Neuron", email = "anhnt@whiteneuron.com"}
@@ -53,7 +53,15 @@ where = ["."]
 include = ["whiteneuron*"]
 
 [tool.setuptools.package-data]
-"whiteneuron" = ["templates/**/*", "static/**/*"]
+"whiteneuron" = [
+    "base/templates/**/*",
+    "base/static/**/*",
+    "feedbacks/templates/**/*",
+    "feedbacks/static/**/*",
+    "templates/**/*",
+    "static/**/*",
+]
+
 
 [project.optional-dependencies]
 dev = ["pytest", "black", "flake8", "pre-commit"]
