@@ -1,139 +1,236 @@
-# django-whiteneuron
+# django-whiteneuron 🚀  
 
-🌟 **django-whiteneuron** là một gói mở rộng giúp nâng cấp giao diện và chức năng Django Admin, mang đến trải nghiệm quản trị hiện đại, trực quan và tối ưu hiệu suất. 🚀
-
----
-
-## **🚀 Tính năng nổi bật**
-✅ **Giao diện hiện đại với Tailwind CSS** – Thiết kế đẹp, tối ưu UX/UI.  
-✅ **Hỗ trợ dark mode & light mode** – Tích hợp sẵn daisyUI để chuyển đổi theme.  
-✅ **Dashboard tùy chỉnh** – Thêm widget, biểu đồ thống kê. 
-✅ **Menu động, biểu đồ & widget nâng cao** – Hỗ trợ mở rộng và tùy chỉnh mạnh mẽ.  
-✅ **Hiệu suất tối ưu** – Load nhanh, giao diện mượt mà ngay cả với lượng dữ liệu lớn.  
+**django-whiteneuron** là một gói mở rộng mạnh mẽ giúp nâng cấp Django Admin Site với giao diện hiện đại, tùy chỉnh linh hoạt và tích hợp nhiều tính năng hỗ trợ quản lý dữ liệu chuyên sâu.  
 
 ---
 
-## **📌 Yêu cầu**
-📌 **Lưu ý**: Package **chỉ chạy với Tailwind CSS phiên bản `3.4.17`**.
+## 📥 **Cài đặt**  
 
-### **1️⃣ Cài đặt `django-whiteneuron`**
-Bạn có thể cài đặt `django-whiteneuron` bằng pip:
-
+### **1️⃣ Cài đặt package**  
+Sử dụng pip để cài đặt `django-whiteneuron`:  
 ```bash
 pip install django-whiteneuron
 ```
 
-Sau đó, thêm vào **`INSTALLED_APPS`** trong `settings.py`:
-
-```python
-INSTALLED_APPS = [
-    'django.contrib.admin',
-    'whiteneuron',  # Kích hoạt giao diện nâng cấp
-]
-```
-
-Chạy migration để đảm bảo mọi thiết lập được cập nhật:
-```bash
-python manage.py migrate
-```
-
 ---
 
-### **2️⃣ Cài đặt Tailwind CSS**
-**django-whiteneuron** sử dụng **Tailwind CSS `3.4.17`** để tối ưu giao diện. Làm theo các bước sau để thiết lập:
+### **2️⃣ Cấu hình Frontend - TailwindCSS & DaisyUI**  
 
-1️⃣ **Cài đặt Tailwind CSS bằng npm**  
+**Lưu ý:** Package này **chỉ chạy với TailwindCSS phiên bản 3.4.17**.  
+
+#### **Cài đặt TailwindCSS**  
 ```bash
-npm install tailwindcss@3.4.17
+npm install tailwindcss
 ```
 
-2️⃣ **Tạo file `tailwind.config.js`** bằng lệnh:
+#### **Tạo file cấu hình `tailwind.config.js`**  
 ```bash
 npx tailwindcss init
 ```
 
-3️⃣ **Cập nhật `package.json`**  
-Thêm `"daisyui": "^4.12.10"` vào `dependencies`:
-
+#### **Thêm DaisyUI vào `package.json`**  
+Thêm dòng sau vào `package.json` trong phần `dependencies`:  
 ```json
-{
-  "dependencies": {
-    "tailwindcss": "^3.4.17",
-    "daisyui": "^4.12.10"
-  }
-}
+"daisyui": "^4.12.10"
 ```
-
-4️⃣ **Cài đặt dependencies**
+Sau đó chạy lệnh:  
 ```bash
 npm install
 ```
 
-5️⃣ **Tạo file `styles.css` trong thư mục root của project**  
-Thêm nội dung sau vào `styles.css`:
+#### **Tạo file `styles.css` ở thư mục gốc của project**  
 ```css
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 ```
 
-6️⃣ **Biên dịch CSS**
-```bash
-npx tailwindcss -i ./styles.css -o ./static/css/output.css --watch
+---
+
+### **3️⃣ Cấu hình Django**  
+
+#### **Thêm vào `INSTALLED_APPS` trong `settings.py`**  
+```python
+INSTALLED_APPS = [
+    "whiteneuron.base",         # Base app
+    "whiteneuron.feedbacks",    # Feedbacks app
+    "whiteneuron.file_management", # File management app
+    "whiteneuron.contrib",      # Contrib app
+    "whiteneuron.dashboard",    # Dashboard app
+]
 ```
-Lệnh này giúp Tailwind biên dịch CSS vào **static files** của Django.
+
+#### **Thêm vào `MIDDLEWARE`**  
+```python
+MIDDLEWARE = [
+    "whiteneuron.base.middleware.ReadonlyExceptionHandlerMiddleware",
+    "whiteneuron.base.middleware.UserActivityMiddleware",
+]
+```
+
+#### **Thiết lập Model User tùy chỉnh**  
+```python
+AUTH_USER_MODEL = "base.User"
+```
 
 ---
 
-### **3️⃣ Chạy server & kiểm tra giao diện**
-Sau khi hoàn tất cài đặt, chạy Django server:
+## ⚙ **Cấu hình giao diện & Admin Panel (Unfold)**  
+
+Thêm vào `settings.py`:  
+
+```python
+from django.templatetags.static import static
+from django.utils.translation import gettext_lazy as _
+from django.urls import reverse_lazy
+
+UNFOLD = {
+    "SITE_HEADER": _("White Neuron"),
+    "SITE_TITLE": _("White Neuron Admin"),
+    "SITE_SUBHEADER": _("Admin panel"),
+    "SITE_DROPDOWN": [
+        {
+            "icon": "diamond",
+            "title": _("White Neuron Co. Ltd."),
+            "link": "https://whiteneuron.com/",
+        },
+        {
+            "icon": "rocket_launch",
+            "title": _("Email: anhnt@whiteneuron.com"),
+            "link": "mailto:anhnt@whiteneuron.com",
+        },
+    ],
+    "SITE_ICON": {
+        "light": lambda request: static("base/images/logo/logo.png"),
+        "dark": lambda request: static("base/images/logo/logo.png"),
+    },
+    "SITE_FAVICONS": [
+        {
+            "rel": "icon",
+            "sizes": "32x32",
+            "type": "image/svg+xml",
+            "href": lambda request: static("base/images/logo/logo.png"),
+        },
+    ],
+    "SHOW_HISTORY": True,
+    "SHOW_LANGUAGES": True,
+    "ENVIRONMENT": "CCMS.utils.environment_callback",
+    "DASHBOARD_CALLBACK": "apps.dashboard.views.dashboard_callback",
+    "LOGIN": {
+        "image": lambda request: static("base/images/login_bg.jpg"),
+    },
+    "STYLES": [
+        lambda request: static("base/css/styles.css"),
+        lambda request: static("base/css/btn-styles.css"),
+        lambda request: static("base/css/loading.css"),
+    ],
+    "SCRIPTS": [
+        lambda request: static("base/js/loading.js"),
+    ],
+}
+```
+
+---
+
+## 📌 **Tích hợp Sidebar & Menu điều hướng**  
+Thêm vào `settings.py` để tùy chỉnh Sidebar:  
+
+```python
+UNFOLD["SIDEBAR"] = {
+    "show_search": True,
+    "show_all_applications": False,
+    "navigation": [
+        {
+            "title": _("Navigation"),
+            "items": [
+                {
+                    "title": _("Dashboard"),
+                    "icon": "dashboard",
+                    "link": reverse_lazy("admin:index"),
+                },
+                {
+                    "title": _("Notifications"),
+                    "icon": "notifications",
+                    "link": reverse_lazy("admin:base_notification_changelist"),
+                    "badge": "whiteneuron.base.utils.notification_badge_callback",
+                },
+                {
+                    "title": _("Feedbacks"),
+                    "icon": "feedback",
+                    "link": reverse_lazy("admin:feedbacks_feedbackdata_changelist"),
+                    "badge": "whiteneuron.feedbacks.utils.feedback_data_badge_callback",
+                },
+            ],
+        },
+        {
+            "title": _("File Management"),
+            "collapsible": True,
+            "items": [
+                {
+                    "title": _("Excel Files"),
+                    "icon": "table",
+                    "link": reverse_lazy("admin:file_management_excelfile_changelist"),
+                    "badge": "whiteneuron.file_management.utils.excelfile_badge_callback",
+                },
+                {
+                    "title": _("PDF Files"),
+                    "icon": "picture_as_pdf",
+                    "link": reverse_lazy("admin:file_management_pdffile_changelist"),
+                    "badge": "whiteneuron.file_management.utils.pdffile_badge_callback",
+                },
+            ],
+        },
+        {
+            "title": _("Users & Groups"),
+            "collapsible": True,
+            "items": [
+                {
+                    "title": _("Users"),
+                    "icon": "person",
+                    "link": reverse_lazy("admin:base_user_changelist"),
+                },
+                {
+                    "title": _("User Activity"),
+                    "icon": "history",
+                    "link": reverse_lazy("admin:base_useractivity_changelist"),
+                },
+                {
+                    "title": _("Groups"),
+                    "icon": "group",
+                    "link": reverse_lazy("admin:auth_group_changelist"),
+                },
+            ],
+        },
+    ],
+}
+```
+
+---
+
+## 🛠 **Chạy dự án**
+Sau khi hoàn tất cài đặt, chạy lệnh sau để khởi động Django:
+
 ```bash
+python manage.py migrate
 python manage.py runserver
 ```
 
-Truy cập **`/admin/`** để trải nghiệm giao diện **django-whiteneuron**!
+Mở trình duyệt và truy cập:  
+🔗 `http://127.0.0.1:8000/admin/`
 
 ---
 
-## **🎨 Tuỳ chỉnh giao diện**
-Bạn có thể thay đổi theme bằng cách sửa **`tailwind.config.js`**:
-
-```js
-module.exports = {
-  plugins: [require("daisyui")],
-  daisyui: {
-    themes: ["light", "dark", "cupcake"], // Thay đổi theme tại đây
-  },
-};
-```
-
-Sau đó, **rebuild CSS**:
-```bash
-npx tailwindcss -i ./styles.css -o ./static/css/output.css --watch
-```
+## 📢 **Liên hệ & Hỗ trợ**
+Nếu bạn có câu hỏi hoặc cần hỗ trợ, vui lòng liên hệ:  
+📧 **Email:** [anhnt@whiteneuron.com](mailto:anhnt@whiteneuron.com)  
+🌐 **Website:** [https://whiteneuron.com](https://whiteneuron.com)  
+🚀 **GitHub Repo:** [https://github.com/tanhtm/django-whiteneuron](https://github.com/tanhtm/django-whiteneuron)
 
 ---
 
-## **📢 Đóng góp**
-Chúng tôi hoan nghênh mọi đóng góp! Nếu bạn muốn tham gia phát triển **django-whiteneuron**, hãy làm theo các bước sau:
-
-1️⃣ **Fork repository này**  
-2️⃣ **Clone về máy:**  
-```bash
-git clone https://github.com/tanhtm/django-whiteneuron.git
-```
-3️⃣ **Tạo nhánh mới:**  
-```bash
-git checkout -b feature-new-ui
-```
-4️⃣ **Commit thay đổi & gửi Pull Request.** 🚀
-
----
-
-## **📜 License**
+## 📜 **License**
 `django-whiteneuron` được phát hành theo giấy phép **MIT License**, bạn có thể sử dụng miễn phí trong các dự án cá nhân và thương mại.
 
-💡 **django-whiteneuron** – Biến Django Admin thành một **trang quản trị mạnh mẽ, chuyên nghiệp và hiện đại**! 🚀  
-📌 **White Neuron - Tăng tốc trải nghiệm quản trị cho Developer!**
-
 ---
+
+🔥 **django-whiteneuron** – Giải pháp tối ưu giúp bạn **nâng cấp Django Admin Site** một cách chuyên nghiệp, mạnh mẽ và hiện đại! 🚀
