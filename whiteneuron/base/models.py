@@ -223,7 +223,7 @@ class BaseModel(SoftDeleteModel):
         abstract=True
 
     def path(self):
-        return f'/{self._meta.app_label}/{self._meta.model_name}/{self.id}/'
+        return f'/admin/{self._meta.app_label}/{self._meta.model_name}/{self.id}/'
 
     def delete(self, request=None, *args, **kwargs):
         super(BaseModel, self).delete(*args, **kwargs)
