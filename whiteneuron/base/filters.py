@@ -14,4 +14,5 @@ class FieldSelectionFilter(MultipleDropdownFilter):
         return r
 
     def queryset(self, request, queryset):
-        return queryset.select_related(*self.value())
+        return queryset
+        
