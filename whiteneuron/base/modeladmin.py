@@ -33,6 +33,7 @@ class ModelAdmin(UnfoldAdmin):
 
     list_fullwidth = True
     list_horizontal_scrollbar_top = True
+    action_buttons_top = False
 
     warn_unsaved_form = True
     compressed_fields = True
@@ -236,7 +237,11 @@ class ModelAdmin(UnfoldAdmin):
             # xóa buttons cũ
             list_display = list(list_display)
             list_display.remove('buttons')
-        list_display += ['buttons',]
+
+        if self.actions_on_top:
+            list_display= ['buttons'] + list(list_display)
+        else:
+            list_display += ['buttons',]
 
         grid_view= int(request.POST.get('grid_view', self.grid_view))
         if grid_view:
