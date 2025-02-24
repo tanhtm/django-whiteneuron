@@ -238,7 +238,7 @@ class ModelAdmin(UnfoldAdmin):
             list_display = list(list_display)
             list_display.remove('buttons')
 
-        if self.actions_on_top:
+        if self.action_buttons_top:
             list_display= ['buttons'] + list(list_display)
         else:
             list_display += ['buttons',]
