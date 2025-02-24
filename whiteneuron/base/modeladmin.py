@@ -360,6 +360,22 @@ class ModelAdmin(UnfoldAdmin):
             extra_context = extra_context or {}
             extra_context['grid_view'] = grid_view
             self.list_display_links= list(self.list_display_links) + ['grid_item_header']
+
+        # Xác định số lượng hiển thị từ request
+        per_page = self.list_per_page
+        if 'per_page' in request.POST:
+            try:
+                per_page = int(request.POST.get('per_page'))
+                if per_page in [5, 10, 20, 50, 100, 200]:
+                    self.list_per_page = per_page
+            except ValueError:
+                pass  # Giữ nguyên giá trị mặc định nếu không hợp lệ
+
+        # Truyền danh sách số lượng hiển thị vào context
+        if extra_context is None:
+            extra_context = {}
+        extra_context['page_sizes'] = [5, 10, 20, 50, 100, 200]
+        
         res = super().changelist_view(request, extra_context)
         return res
     
