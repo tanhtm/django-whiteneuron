@@ -209,6 +209,20 @@ class ModelAdmin(UnfoldAdmin):
                 readonly_fields += (field,)
         return readonly_fields
     
+    def get_list_display_links(self, request, list_display):
+        fields= super().get_list_display_links(request, list_display)
+        if self.action_buttons_top:
+            try:
+                fields.remove('buttons')
+            except:
+                pass
+        if len(fields) == 0:
+            if list_display[0] != 'buttons':
+                fields = [list_display[0]]
+            else:
+                fields = [list_display[1]]
+        return fields
+    
     def get_list_display(self, request: HttpRequest) -> Sequence[str]:
         list_display = super().get_list_display(request)
         filtered_list_display = request.GET.getlist(FieldSelectionFilter.parameter_name, None)
