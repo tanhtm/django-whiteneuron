@@ -31,6 +31,9 @@ class ModelAdmin(UnfoldAdmin):
     # MAX OBJECTS PER PAGE
     list_per_page = 50
 
+    list_fullwidth = True
+    list_horizontal_scrollbar_top = True
+
     warn_unsaved_form = True
     compressed_fields = True
 
