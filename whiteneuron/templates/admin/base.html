@@ -3,6 +3,12 @@
 {% csrf_token %}
 {% load static%}
 
+{% block stylesheet %}
+    {{ block.super }}
+    <link rel="stylesheet" href='{% static "base/css/styles.css" %}'>
+    <link rel="stylesheet" href='{% static "base/css/loading.css" %}'>
+{% endblock %}
+
 {% block base %}
     <!-- Overlay loading -->
     <div id="loading-overlay" display="flex">
@@ -10,3 +16,8 @@
     </div>
     {{ block.super }}
 {% endblock %}
+
+{% block extrabody %}
+    <script src="{% static 'base/js/loading.js' %}"></script>
+    {{ block.super }}
+{% endblock extrabody %}

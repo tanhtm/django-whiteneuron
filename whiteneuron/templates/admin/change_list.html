@@ -10,6 +10,7 @@
             bottom: 5px;
         }
     </style>
+    <link rel="stylesheet" href='{% static "base/css/btn-styles.css" %}'>
 {% endblock %}
 
 {% block result_list %}
@@ -33,17 +34,20 @@
            {% csrf_token %}
            {% if grid_view == True %}
                 <input type="hidden" name="grid_view" value="0">
-                <button type="submit" class="material-symbols-outlined md-18 text-base-500 bg-white border border-base-200 dark:bg-base-900 dark:border-base-700 cursor-pointer flex font-medium group items-center px-3 py-2 rounded shadow-sm text-sm">table_view</button>
+                <button type="submit" 
+                style="font-size: 1.5rem"
+                class="h-12 w-12 material-symbols-outlined text-base-500 bg-white border border-base-200 dark:bg-base-900 dark:border-base-700 cursor-pointer flex font-medium group items-center px-3 py-2 rounded shadow-sm">table_view</button>
             {% else %}
                 <input type="hidden" name="grid_view" value="1">
-                <button type="submit" class="material-symbols-outlined md-18 text-base-500 bg-white border border-base-200 dark:bg-base-900 dark:border-base-700 cursor-pointer flex font-medium group items-center px-3 py-2 rounded shadow-sm text-sm">grid_view</button>
+                <button type="submit" 
+                style="font-size: 1.5rem"
+                class="h-12 w-12 material-symbols-outlined text-base-500 bg-white border border-base-200 dark:bg-base-900 dark:border-base-700 cursor-pointer flex font-medium group items-center px-3 py-2 rounded shadow-sm">grid_view</button>
             {% endif %}
         </form>
 
         {# Dropdown chọn số lượng hiển thị #}
-        <form method="post" action="" class="ml-4">
+        <form method="post" action="" class="">
             {% csrf_token %}
-            <label for="per_page" class="mr-2"></label>
             <select name="per_page" id="per_page" class="ui-select ui-select-info ui-select-sm w-full max-w-xs dark:bg-base-900 dark:border-base-700
             " onchange="this.form.submit()">
                 <option disabled >{{ _('Items per page') }}</option>
