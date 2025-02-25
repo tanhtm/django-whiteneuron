@@ -6,11 +6,11 @@
 {% block stylesheet %}
     {{ block.super }}
     <link rel="stylesheet" href='{% static "base/css/styles.css" %}'>
-    <link rel="stylesheet" href='{% static "base/css/loading.css" %}'>
 {% endblock %}
 
 {% block base %}
     <!-- Overlay loading -->
+    <link rel="stylesheet" href='{% static "base/css/loading.css" %}'>
     <div id="loading-overlay" display="flex">
         <img src="{% static 'base/images/loading.gif' %}" alt="Loading...">
     </div>
