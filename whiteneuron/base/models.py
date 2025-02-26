@@ -425,7 +425,7 @@ class Image(BaseModel):
         if r is None or self.image is None:
             mes= _('Image not found')
             return format_html(f'<p>{mes}</p>')
-        return format_html('<img src="{}" width="100"/>'.format(r))
+        return format_html('<img src="{}" width="100" height="100" style="width: 100px; height: 100px; object-fit: cover;"/>', r)
     imgThumbnail.short_description = _('Thumbnail')
 
     def imgPreview(self):
