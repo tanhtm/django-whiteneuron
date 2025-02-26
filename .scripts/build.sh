@@ -9,7 +9,9 @@ DATE=$(date)
 if [[ $REPLY =~ ^[Yy]$ ]]
 then
   echo "Enter commit message:"
-  read message
+  MESSAGE=" "
+  read MESSAGE
+  echo "Pushing to Github with message: $MESSAGE"
   git add .
   git commit -m "Build $DATE: $message"
   git push
