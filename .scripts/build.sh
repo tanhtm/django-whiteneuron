@@ -2,18 +2,14 @@ echo "Building Tailwind CSS..."
 bash .scripts/tailwind.sh
 echo "Building package..."
 uv build
-echo "Github push?"
-read -p "Do you want to push to Github? (y/n) " -n 1 -r
+read -p "Do you want to push to Github? (y/n) " REPLY
 echo
 DATE=$(date)
-if [[ $REPLY =~ ^[Yy]$ ]]
-then
-  echo "Enter commit message:"
-  MESSAGE=" "
-  read MESSAGE
+if [[ $REPLY =~ ^[Yy]$ ]]; then
+  read -p "Enter commit message: " MESSAGE
   echo "Pushing to Github with message: $MESSAGE"
   git add .
-  git commit -m "Build $DATE: $message"
+  git commit -m "Build $DATE: $MESSAGE"
   git push
 fi
 echo "Done!"
