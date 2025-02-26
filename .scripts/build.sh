@@ -8,8 +8,10 @@ echo
 DATE=$(date)
 if [[ $REPLY =~ ^[Yy]$ ]]
 then
+  echo "Enter commit message:"
+  read message
   git add .
-  git commit -m "Build $DATE" 
+  git commit -m "Build $DATE: $message"
   git push
 fi
 echo "Done!"

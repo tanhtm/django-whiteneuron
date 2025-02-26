@@ -8,6 +8,7 @@ from celery import shared_task
 from import_export.formats.base_formats import XLSX
 
 from whiteneuron.file_management.models import ExcelFile
+from whiteneuron import base
 
 from .utils import get_resource
 
@@ -20,7 +21,7 @@ def export(fileobj_id,
     # Khởi tạo resource
     fileobj = ExcelFile.objects.get(id=fileobj_id)
     try:
-        model = whiteneuron.get_model(app_label=app_label, model_name=model_name)
+        model = apps.get_model(app_label=app_label, model_name=model_name)
         resource = get_resource(app_label, model_name)()
         # queryset = model.objects.filter(id__in=ids)
         dataset = resource.export(model.objects.all())
