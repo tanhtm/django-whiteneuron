@@ -1,6 +1,6 @@
 [project]
 name = "django-whiteneuron"
-version = "0.1.22"
+version = "0.1.23"
 description = "django-whiteneuron là một gói mở rộng giúp nâng cấp giao diện và chức năng Django Admin, mang đến trải nghiệm quản trị hiện đại, trực quan và tối ưu hiệu suất. 🚀"
 authors = [
     {name = "White Neuron", email = "anhnt@whiteneuron.com"}
@@ -25,6 +25,7 @@ dependencies = [
     "openpyxl>=3.1.5",
     "pandas>=2.2.3",
     "pillow>=11.0.0",
+    "python-dotenv>=1.0.1",
     "redis>=5.2.1",
 ]
 requires-python = ">=3.10"
