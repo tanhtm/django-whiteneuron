@@ -298,7 +298,7 @@ class ModelAdmin(UnfoldAdmin):
                 meta_fields.remove('updated_at')
                 meta_fields.remove('updated_by')
                 meta_fields.append(('updated_at', 'updated_by'))
-            fieldsets.append(('Meta', {'fields': meta_fields, 'classes': ('collapse',)}))
+            fieldsets.append(('Meta', {'fields': meta_fields, 'classes': ["tab"]}))
         return fieldsets
     
     def buttons(self, obj):
