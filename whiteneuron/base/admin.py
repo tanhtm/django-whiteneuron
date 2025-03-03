@@ -410,7 +410,11 @@ class NotificationAdmin(ModelAdmin):
         return redirect(obj.obj_link)
     
     def has_view_obj_link_permission(self, request, obj=None):
-        return self.has_view_permission(request, obj)
+        if obj is not None:
+            obj= get_object_or_404(Notification, pk=obj)
+            if obj.obj_link:
+                return True
+        return False
     
     def has_add_permission(self, request):
         # if request.user.is_superuser:
