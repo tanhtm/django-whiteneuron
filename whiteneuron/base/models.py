@@ -242,6 +242,7 @@ class BaseModel(SoftDeleteModel):
 class Notification(models.Model):
     user= models.ForeignKey(User, on_delete=models.CASCADE)
     title = models.CharField(max_length=255)
+    obj_link= models.CharField(max_length=255, null=True, blank=True) # link to object
     content = models.TextField()
     is_read = models.BooleanField(default=False, verbose_name=_("Read"))
     flag = models.CharField(max_length=25, choices=[("info", "info"), 

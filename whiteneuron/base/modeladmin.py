@@ -132,12 +132,13 @@ class ModelAdmin(UnfoldAdmin):
         content_html= ''
         action= ''
         user= request.user
+        obj_link= f"/admin/{obj._meta.app_label}/{obj._meta.model_name}/{obj.id}/change/"
         if not change: # check if the object is being created
             obj.updated_by= user
             obj.created_by= user
             action= 'create'
             title= f"New {obj._meta.verbose_name} \"{obj}\" has been created by user \"{obj.created_by}\""
-            content_html= f"New {obj._meta.verbose_name} <a href='/admin/{obj._meta.app_label}/{obj._meta.model_name}/{obj.id}/change/'>{obj}</a> has been created by user \"{obj.created_by}\""
+            content_html= f"New {obj._meta.verbose_name} <a href='{obj_link}'>{obj}</a> has been created by user \"{obj.created_by}\""
 
         # check if the object is being updated with a new version
         else:
@@ -167,7 +168,6 @@ class ModelAdmin(UnfoldAdmin):
                 for field in fields_changed:
                     content_html+= f"<li>{field[0].verbose_name if hasattr(field[0], 'verbose_name') else field[0]}: {field[1]} -> {field[2]}</li>"
                 content_html+= "</ul>"
-                content_html+= f"<a href='/admin/{obj._meta.app_label}/{obj._meta.model_name}/{obj.id}/change/' class='ui-btn ui-btn-primary ui-btn-xs'>View</a>"
         super().save_model(request, obj, form, change)
         # send notification to superuser when create or update successfully
         if title:
@@ -175,6 +175,7 @@ class ModelAdmin(UnfoldAdmin):
                 Notification.objects.create(user= user, title= title,
                                             flag= 'info',
                                             action= action,
+                                            obj_link= obj_link,
                                             content= content_html)
 
 

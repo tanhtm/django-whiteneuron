@@ -402,6 +402,15 @@ class NotificationAdmin(ModelAdmin):
             },
         ),
     )
+
+    actions_submit_line = ["view_obj_link"]
+
+    @action(description=_("View"), permissions= ["view_obj_link"])
+    def view_obj_link(self, request, obj):
+        return redirect(obj.obj_link)
+    
+    def has_view_obj_link_permission(self, request, obj=None):
+        return self.has_view_permission(request, obj)
     
     def has_add_permission(self, request):
         # if request.user.is_superuser:
