@@ -211,8 +211,7 @@ class ModelAdmin(UnfoldAdmin):
             for field in fields_extra:
                 if not field in list_filter:
                     if field in [f.name for f in self.model._meta.fields]:
-                        list_filter += ([field, MultipleChoicesDropdownFilter],
-                                         )
+                        list_filter += (field,)
 
         
 
