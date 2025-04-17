@@ -29,6 +29,7 @@ from unfold.contrib.filters.admin import (
     ChoicesCheckboxFilter,
     ChoicesRadioFilter,
     BooleanRadioFilter,
+    RangeDateFilter, RangeDateTimeFilter
 )
 
 def get_verbose_name_field(model, field):
@@ -201,16 +202,16 @@ class ModelAdmin(UnfoldAdmin):
 
         # check nếu model có trường sau thì mới thêm vào list_filter
         if self.show_meta_filter:
-            fields_extra = [['created_at', MultipleChoicesDropdownFilter],
-                            ['created_by', MultipleChoicesDropdownFilter],
-                            ['updated_at', MultipleChoicesDropdownFilter],
-                            ['updated_by', MultipleChoicesDropdownFilter]]
+            fields_extra = [['created_at', RangeDateFilter],
+                            ['created_by', AutocompleteSelectMultipleFilter],
+                            ['updated_at', RangeDateFilter],
+                            ['updated_by', AutocompleteSelectMultipleFilter]]
             if request.user.is_superuser: #is_hidden
                 fields_extra += [['is_hidden', BooleanRadioFilter],
                                  ['is_deleted', BooleanRadioFilter]]
             for field in fields_extra:
                 if not field in list_filter:
-                    if field in [f.name for f in self.model._meta.fields]:
+                    if field[0] in [f.name for f in self.model._meta.fields]:
                         list_filter += (field,)
 
         
