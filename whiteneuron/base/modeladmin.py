@@ -20,6 +20,14 @@ from .filters import FieldSelectionFilter
 from django.urls import path
 from django.shortcuts import render
 
+from unfold.contrib.filters.admin import (
+    AutocompleteSelectFilter,
+    AutocompleteSelectMultipleFilter,
+    MultipleDropdownFilter,
+    DropdownFilter,
+    MultipleChoicesDropdownFilter
+)
+
 def get_verbose_name_field(model, field):
     try:
         return str(model._meta.get_field(field).verbose_name)
@@ -196,7 +204,8 @@ class ModelAdmin(UnfoldAdmin):
             for field in fields_extra:
                 if not field in list_filter:
                     if field in [f.name for f in self.model._meta.fields]:
-                        list_filter += (field,)
+                        list_filter += ([field, MultipleChoicesDropdownFilter],
+                                         )
 
         
 
