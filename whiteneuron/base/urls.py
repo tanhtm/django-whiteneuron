@@ -9,7 +9,6 @@ from .sites import base_admin_site
 from .views import HomeView
 
 urlpatterns = []
-urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
 
 if settings.DEBUG:
     urlpatterns += [
