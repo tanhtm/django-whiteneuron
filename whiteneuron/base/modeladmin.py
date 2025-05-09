@@ -156,7 +156,10 @@ class ModelAdmin(UnfoldAdmin):
         else:
             fields_changed= []
             isUpdate= False
-            old= obj.__class__.objects.get(pk= obj.pk)
+            if hasattr(obj.__class__, 'objects_all'):
+                old= obj.__class__.objects_all.get(pk= obj.pk)
+            else:
+                old= obj.__class__.objects.get(pk= obj.pk)
 
             for attr in obj.__dict__:
                 if attr in ['_state', 'created_at', 'created_by', 'updated_at', 'updated_by']:
