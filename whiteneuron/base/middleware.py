@@ -23,6 +23,8 @@ class RateLimitMiddleware:
         '/__debug__/',
         '/__reload__/',
         '/.well-known/',
+        '/api/system/health/',
+        '/api/system/ready/',
     )
 
     def __init__(self, get_response):
@@ -237,7 +239,8 @@ class UserActivityMiddleware:
         ('/__debug__/', 'contains'),
         ('/jsi18n/', 'contains'),
         ('/.well-known/', 'contains'),
-        ('/ws/', 'startwith'),  # WebSocket handshake — không log, không rate-limit per-user
+        ('/ws/', 'startwith'),
+        ('/api/system/', 'startwith'),  # health / readiness probes — không log  # WebSocket handshake — không log, không rate-limit per-user
     ]
 
     def __init__(self, get_response):

@@ -127,6 +127,8 @@ CORS_ALLOWED_ORIGINS = environ.get(
 ######################################################################
 if not DEBUG:
     SECURE_SSL_REDIRECT = True
+    # Cho phép probe nội bộ (k8s / docker / LB) gọi qua HTTP mà không bị 301
+    SECURE_REDIRECT_EXEMPT = [r"^api/system/(health|ready)/$"]
     SECURE_HSTS_SECONDS = 31536000  # 1 year
     SECURE_HSTS_INCLUDE_SUBDOMAINS = True
     SECURE_HSTS_PRELOAD = True
@@ -741,6 +743,15 @@ if SENTRY_DSN:
 CELERY_BROKER_URL = environ.get("CELERY_BROKER_URL", "redis://localhost:6379/0")
 CELERY_ACCEPT_CONTENT = ['json']
 CELERY_TASK_SERIALIZER = 'json'
+
+######################################################################
+# System API (api/system/version|health|ready|info)
+######################################################################
+APP_VERSION = environ.get("APP_VERSION")  # phiên bản app của project; mặc định = version package
+SYSTEM_API_TOKEN = environ.get("SYSTEM_API_TOKEN")  # token cho monitoring truy cập info/
+SYSTEM_API_READY_CHECKS = [
+    c.strip() for c in environ.get("SYSTEM_API_READY_CHECKS", "database,cache").split(",") if c.strip()
+]
 
 ######################################################################
 # CRISPY FORMS

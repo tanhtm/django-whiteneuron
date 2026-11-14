@@ -371,6 +371,41 @@ Request → check static env blacklist (O(1))
         → 403 nếu match, không tốn rate limit check
 ```
 
+## System API
+
+Quick endpoints for checking version and health of the system (monitoring, load balancer, Kubernetes probes). Mount them in your project `urls.py` (already included in `whiteneuron.base.urls`):
+
+```python
+path("api/system/", include("whiteneuron.base.system_urls")),
+```
+
+| Endpoint | Access | Description |
+|---|---|---|
+| `GET /api/system/version/` | Public | Project name, app version, `django-whiteneuron`, Django & Python versions |
+| `GET /api/system/health/` | Public | Liveness probe — no DB/cache access, always `200 {"status": "ok"}` |
+| `GET /api/system/ready/` | Public | Readiness probe — runs `database`, `cache` (and optional `celery`) checks with latency; `200` if all OK, else `503`. Error messages only shown to superuser/token |
+| `GET /api/system/info/` | Superuser or token | Hostname, PID, uptime, timezone, DB/cache backend, pending migrations, check results |
+
+```bash
+curl https://example.com/api/system/version/
+curl https://example.com/api/system/ready/
+curl -H "Authorization: Bearer $SYSTEM_API_TOKEN" https://example.com/api/system/info/
+```
+
+Settings / env vars:
+
+| Setting | Default | Notes |
+|---|---|---|
+| `APP_VERSION` | package version | Your project's own version shown in `version/` |
+| `SYSTEM_API_TOKEN` | unset | Grants access to `info/` via `X-System-Token` or `Authorization: Bearer` |
+| `SYSTEM_API_READY_CHECKS` | `database,cache` | Add `celery` to also ping the Celery broker |
+
+`health/` and `ready/` are exempt from rate limiting, user activity logging and `SECURE_SSL_REDIRECT` (so internal HTTP probes don't get a 301). If you write your own settings, add:
+
+```python
+SECURE_REDIRECT_EXEMPT = [r"^api/system/(health|ready)/$"]
+```
+
 ## Error Pages
 
 Error templates live in `whiteneuron/templates/` and are used automatically by Django when `DEBUG=False`:
