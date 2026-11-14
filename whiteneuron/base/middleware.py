@@ -239,8 +239,9 @@ class UserActivityMiddleware:
         ('/__debug__/', 'contains'),
         ('/jsi18n/', 'contains'),
         ('/.well-known/', 'contains'),
-        ('/ws/', 'startwith'),
-        ('/api/system/', 'startwith'),  # health / readiness probes — không log  # WebSocket handshake — không log, không rate-limit per-user
+        ('/ws/', 'startwith'),  # WebSocket handshake — không log, không rate-limit per-user
+        ('/api/system/', 'startwith'),  # health / readiness probes — không log
+        ('/api/notifications/unread-count/', 'exact'),  # badge polling — không log
     ]
 
     def __init__(self, get_response):
