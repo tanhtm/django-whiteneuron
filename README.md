@@ -406,6 +406,33 @@ Settings / env vars:
 SECURE_REDIRECT_EXEMPT = [r"^api/system/(health|ready)/$"]
 ```
 
+## Notification API
+
+JSON API for the **logged-in user's own notifications** (session auth). Already included in `whiteneuron.base.urls`; to mount manually:
+
+```python
+path("api/notifications/", include("whiteneuron.notification.urls")),
+```
+
+| Endpoint | Description |
+|---|---|
+| `GET /api/notifications/` | Paginated list. Query: `page`, `page_size` (max 100), `unread=1`, `flag=info\|success\|warning\|error\|danger` |
+| `GET /api/notifications/unread-count/` | `{"unread_count": n}` — lightweight, for badges / polling (not logged in User Activity) |
+| `GET /api/notifications/<id>/` | Detail, including `changed_data` |
+| `POST /api/notifications/<id>/read/` | Mark as read |
+| `POST /api/notifications/<id>/unread/` | Mark as unread |
+| `POST /api/notifications/read-all/` | Mark all as read |
+
+- Not logged in → `401`; another user's notification → `404`.
+- `POST` requests require the CSRF token (`X-CSRFToken` header).
+
+```js
+await fetch("/api/notifications/read-all/", {
+  method: "POST",
+  headers: { "X-CSRFToken": getCookie("csrftoken") },
+});
+```
+
 ## Error Pages
 
 Error templates live in `whiteneuron/templates/` and are used automatically by Django when `DEBUG=False`:

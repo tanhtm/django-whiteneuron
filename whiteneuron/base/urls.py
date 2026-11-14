@@ -22,6 +22,7 @@ if settings.BROWSER_RELOAD:
 urlpatterns += [
     path("", HomeView.as_view(), name="home"),
     path("api/system/", include("whiteneuron.base.system_urls")),
+    path("api/notifications/", include("whiteneuron.notification.urls")),
     path("base/guest-login/", GuestLoginView.as_view(), name="guest_login"),
     # path("i18n/", include("django.conf.urls.i18n")),
     path("ckeditor5/", include('django_ckeditor_5.urls')),
