@@ -116,3 +116,57 @@ class Notification(models.Model):
         message = f"{self.title}"
         type= self.flag
         return notify_admin(message, type=type, obj_link=self.obj_link, action=self.action, changed_data=self.changed_data if self.changed_data else "")
+
+from django.utils import timezone
+
+
+class ReleaseNoteQuerySet(models.QuerySet):
+    def visible(self):
+        """Release note đã publish và đến thời điểm hiển thị."""
+        return self.filter(is_published=True, published_at__lte=timezone.now())
+
+    def unseen_by(self, user):
+        return self.visible().exclude(views__user=user)
+
+
+class ReleaseNote(models.Model):
+    """Ghi chú phát hành (release note / "Có gì mới") hiển thị cho user."""
+
+    version = models.CharField(max_length=50, unique=True, verbose_name=_("Version"))
+    title = models.CharField(max_length=255, verbose_name=_("Title"))
+    content = models.TextField(blank=True, verbose_name=_("Content"),
+                               help_text=_("Markdown is supported."))
+    is_published = models.BooleanField(default=False, verbose_name=_("Published"))
+    published_at = models.DateTimeField(default=timezone.now, verbose_name=_("Published At"),
+                                        help_text=_("Users only see the note from this time."))
+    created_at = models.DateTimeField(auto_now_add=True, verbose_name=_("Created At"))
+    updated_at = models.DateTimeField(auto_now=True, verbose_name=_("Updated At"))
+
+    objects = ReleaseNoteQuerySet.as_manager()
+
+    class Meta:
+        db_table = "release_notes"
+        ordering = ("-published_at", "-pk")
+        verbose_name = _("release note")
+        verbose_name_plural = _("release notes")
+
+    def __str__(self):
+        return f"{self.version} — {self.title}"
+
+
+class ReleaseNoteView(models.Model):
+    """User đã xem release note nào (để chỉ hiện popup "Có gì mới" một lần)."""
+
+    release_note = models.ForeignKey(ReleaseNote, on_delete=models.CASCADE, related_name="views",
+                                     verbose_name=_("Release note"))
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="release_note_views",
+                             verbose_name=_("User"))
+    seen_at = models.DateTimeField(auto_now_add=True, verbose_name=_("Seen At"))
+
+    class Meta:
+        db_table = "release_note_views"
+        constraints = [
+            models.UniqueConstraint(fields=("release_note", "user"), name="uniq_release_note_view"),
+        ]
+        verbose_name = _("release note view")
+        verbose_name_plural = _("release note views")

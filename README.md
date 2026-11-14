@@ -433,6 +433,34 @@ await fetch("/api/notifications/read-all/", {
 });
 ```
 
+## Release Notes ("What's new")
+
+Superusers write release notes in **Admin → Release notes** (`version`, `title`, Markdown `content`, `is_published`, `published_at`). Users only see notes that are published and whose `published_at` has passed (so you can schedule them). The system records which user has seen which note, so the frontend can show a "What's new" popup exactly once.
+
+Run `python manage.py migrate` after upgrading (new tables `release_notes`, `release_note_views`).
+
+| Endpoint | Description |
+|---|---|
+| `GET /api/release-notes/` | Paginated list (`page`, `page_size` ≤ 100) + `unseen_count` |
+| `GET /api/release-notes/latest/` | Latest note, or `{"result": null}` |
+| `GET /api/release-notes/unseen/` | Notes the user hasn't seen — use for the popup |
+| `GET /api/release-notes/<id>/` | Detail |
+| `POST /api/release-notes/<id>/seen/` | Mark as seen |
+| `POST /api/release-notes/seen-all/` | Mark all as seen |
+
+Each item contains `version`, `title`, `content` (Markdown), `content_html` (rendered), `published_at`, `is_seen`. Login required (`401` otherwise); `POST` requires the CSRF token.
+
+```js
+const { results } = await (await fetch("/api/release-notes/unseen/")).json();
+if (results.length) {
+  showWhatsNewModal(results);           // your UI
+  await fetch("/api/release-notes/seen-all/", {
+    method: "POST",
+    headers: { "X-CSRFToken": getCookie("csrftoken") },
+  });
+}
+```
+
 ## Error Pages
 
 Error templates live in `whiteneuron/templates/` and are used automatically by Django when `DEBUG=False`:

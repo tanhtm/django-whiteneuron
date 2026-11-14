@@ -203,3 +203,34 @@ class NotificationAdmin(ModelAdmin):
         return _("No changes")
     display_changed_data.short_description = _("Changed Data")
     
+
+from .models import ReleaseNote
+
+
+@admin.register(ReleaseNote, site=base_admin_site)
+class ReleaseNoteAdmin(ModelAdmin):
+    list_display = ("version", "title", "is_published", "published_at", "seen_count")
+    list_filter = ("is_published",)
+    search_fields = ("version", "title", "content")
+    ordering = ("-published_at", "-pk")
+    readonly_fields = ("created_at", "updated_at")
+    fields = ("version", "title", "content", "is_published", "published_at", "created_at", "updated_at")
+
+    def has_module_permission(self, request):
+        return request.user.is_superuser
+
+    def has_view_permission(self, request, obj=None):
+        return request.user.is_superuser
+
+    def has_add_permission(self, request):
+        return request.user.is_superuser
+
+    def has_change_permission(self, request, obj=None):
+        return request.user.is_superuser
+
+    def has_delete_permission(self, request, obj=None):
+        return request.user.is_superuser
+
+    @display(description=_("Seen by"))
+    def seen_count(self, obj):
+        return obj.views.count()
